@@ -18,7 +18,7 @@ var (
 func init() {
 
 	flag.StringVar(&RoundNo, "r", "", "Round Number")
-	flag.StringVar(&TickDurationMinutes, "t", "", "Tick Duration in Minutes")
+	flag.StringVar(&TickDurationMinutes, "t", "60", "Tick Duration in Minutes")
 	flag.Parse()
 	TickCount = 0
 }
@@ -32,7 +32,7 @@ func gameLoop(tickMinutes int) {
 
 	fmt.Println(time.Now())
 	// Set tick timer
-	tick := time.Tick(time.Duration(tickMinutes) * time.Minute)
+	tick := time.Tick(time.Duration(tickMinutes) * time.Second)
 
 	for {
 		select {
@@ -46,7 +46,31 @@ func gameLoop(tickMinutes int) {
 }
 
 func actionProcessor() {
+	// get queue of tick actions
+	jobqueue := [4]string{
+		"moveShip",
+		"moveShip",
+		"combat",
+	}
+	//
+	for i, jobName := range jobqueue {
+		fmt.Printf("2**%d = %d\n", i, jobName)
+		executeAction(jobName)
+	}
 
+}
+
+func executeAction(action string) {
+	switch action {
+	case "shipCombat":
+		fmt.Println(action)
+	case "moveShip":
+		fmt.Println(action)
+	case "stuff":
+		fmt.Println(action)
+	default:
+		fmt.Println("default fall through")
+	}
 }
 
 type baseAction interface {
